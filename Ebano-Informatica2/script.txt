@@ -1,0 +1,135 @@
+@echo off
+title DEMO DE SEGURIDAD - No tengas miedo, es solo una clase
+color 0C
+echo ==============================================
+echo    SIMULADOR DE AMENAZAS DE SEGURIDAD EN WINDOWS
+echo ==============================================
+echo.
+echo Este script muestra COMO PODRIA actuar un malware
+echo o un atacante basico. NADA se borra realmente.
+echo.
+pause
+
+:menu
+cls
+echo ==============================================
+echo   ELIGE UNA DEMOSTRACION (1-4)
+echo ==============================================
+echo 1. Suplantacion de pantalla (phishing)
+echo 2. Robo de informacion del sistema
+echo 3. Persistencia (inicio automatico)
+echo 4. Simulacion de ransomware EDUCATIVO
+echo 5. SALIR
+echo.
+set /p opcion="Opcion: "
+
+if %opcion%==1 goto phishing
+if %opcion%==2 goto robo
+if %opcion%==3 goto persistencia
+if %opcion%==4 goto ransomware
+if %opcion%==5 exit
+goto menu
+
+:phishing
+cls
+color 0E
+echo ==============================================
+echo   DEMO: PANTALLA DE FALSA AUTENTICACION
+echo ==============================================
+echo.
+echo [*] Un atacante podria mostrar esta pantalla
+echo     para robar tu contraseña.
+echo.
+set /p fake_pass="[SIMULACION] Introduce tu contraseña (educativo): "
+echo [*] En un ataque real, la contraseña '%fake_pass%' se enviaria al atacante.
+echo.
+echo [!] LECCION: Nunca introduzcas tu contraseña en ventanas sospechosas.
+echo     Siempre presiona Ctrl+Alt+Supr para bloquear sesion real.
+pause
+goto menu
+
+:robo
+cls
+color 0C
+echo ==============================================
+echo   DEMO: RECOLECCION DE INFORMACION
+echo ==============================================
+echo.
+echo [*] Un script basico puede obtener esto sin que lo notes:
+echo.
+echo Usuario actual: %username%
+echo Nombre del equipo: %computername%
+echo Sistema operativo: 
+wmic os get caption | findstr /v "Caption"
+echo.
+echo IP local:
+ipconfig | findstr "IPv4"
+echo.
+echo Programas instalados (primeros 5):
+dir "C:\Program Files" /b | findstr /n "^" | findstr ":[1-5]"
+echo.
+echo [!] LECCION: Mucha informacion publica. Por eso NO se debe compartir pantalla sin cuidado.
+pause
+goto menu
+
+:persistencia
+cls
+color 0D
+echo ==============================================
+echo   DEMO: PERSISTENCIA (inicio automatico)
+echo ==============================================
+echo.
+echo [*] Un atacante podria lograr que este script se ejecute CADA VEZ que inicies Windows.
+echo.
+echo [*] Metodos comunes:
+echo     - Carpeta de inicio: %appdata%\Microsoft\Windows\Start Menu\Programs\Startup
+echo     - Registro de Windows (mas avanzado)
+echo.
+echo [*] Para comprobarlo, escribe 'shell:startup' en Ejecutar (Win+R)
+echo.
+echo [!] LECCION: Revisa periodicamente tu carpeta de inicio y tareas programadas.
+pause
+goto menu
+
+:ransomware
+cls
+color 4F
+echo ==============================================
+echo   DEMO EDUCATIVA DE RANSOMWARE (NO HACE DAÑO)
+echo ==============================================
+echo.
+echo [*] Vamos a SIMULAR que tus archivos fueron "encriptados"
+echo     (en realidad solo cambiaremos extensiones de archivos de prueba)
+echo.
+echo [*] Creando carpeta de pruebas segura...
+mkdir C:\temp_demo_seguridad 2>nul
+cd C:\temp_demo_seguridad
+echo Archivo de prueba > documento.txt
+echo Otra prueba > notas.txt
+echo.
+echo [*] Archivos originales: documento.txt, notas.txt
+dir
+pause
+echo.
+echo [*] SIMULANDO ENCRIPTACION (cambiando extension a .encrypted)...
+ren *.txt *.encrypted
+dir
+echo.
+echo [*] Mensaje tipico de ransomware:
+echo ==============================================
+echo     TUS ARCHIVOS FUERON ENCRIPTADOS
+echo     Paga 100 BTC para recuperarlos
+echo ==============================================
+echo.
+echo [!] LEYENDO Y BORRANDO SIMULACION...
+del *.encrypted
+cd \
+rmdir C:\temp_demo_seguridad
+echo [*] Simulacion limpiada. NADA real fue dañado.
+echo.
+echo [!] LECCION: 
+echo     1. Siempre respalda en la nube o disco externo.
+echo     2. No abras archivos .exe sospechosos.
+echo     3. Windows Defender actualizado ayuda.
+pause
+goto menu
